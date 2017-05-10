@@ -39,7 +39,7 @@ class PhpFpmTest extends TestCase
         $this->assertContains(sprintf("\ngroup = %s", group()), $contents);
         $this->assertContains(sprintf("\nlisten.owner = %s", user()), $contents);
         $this->assertContains(sprintf("\nlisten.group = %s", group()), $contents);
-        $this->assertContains("\nlisten = ".VALET_HOME_PATH."/valet.sock", $contents);
+        $this->assertContains("\nlisten = 127.0.0.1:9000", $contents);
     }
 }
 

@@ -22,10 +22,11 @@ class CommandLine
      *
      * @param  string  $command
      * @return void
+     * @todo  currently WSL has a bug with changing users the work around is to add and extra sudo. When this is fixed remove extra sudo
      */
     public function quietlyAsUser($command)
     {
-        $this->quietly('sudo -u '.user().' '.$command.' > /dev/null 2>&1');
+        $this->quietly('sudo sudo -u '.user().' '.$command.' > /dev/null 2>&1');
     }
 
     /**
@@ -57,10 +58,11 @@ class CommandLine
      * @param  string  $command
      * @param  callable $onError
      * @return string
+     * @todo  currently WSL has a bug with changing users the work around is to add and extra sudo. When this is fixed remove extra sudo
      */
     public function runAsUser($command, callable $onError = null)
     {
-        return $this->runCommand('sudo -u '.user().' '.$command, $onError);
+        return $this->runCommand('sudo sudo -u '.user().' '.$command, $onError);
     }
 
     /**
