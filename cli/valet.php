@@ -18,7 +18,7 @@ use Illuminate\Container\Container;
  */
 Container::setInstance(new Container);
 
-$version = 'v2.0.24';
+$version = 'v3.0.0';
 
 $app = new Application('Valet', $version);
 
@@ -37,7 +37,7 @@ $app->command('install [--ignore-selinux]', function ($ignoreSELinux) {
     Configuration::install();
     Nginx::install();
     PhpFpm::install();
-    DnsMasq::install(Configuration::read()['domain']);
+    // DnsMasq::install(Configuration::read()['domain']);
     Nginx::restart();
     Valet::symlinkToUsersBin();
     WSL::copyScripts();
@@ -65,9 +65,9 @@ if (is_dir(VALET_HOME_PATH)) {
             return info(Configuration::read()['domain']);
         }
 
-        DnsMasq::updateDomain(
-            $oldDomain = Configuration::read()['domain'], $domain = trim($domain, '.')
-        );
+        // DnsMasq::updateDomain(
+        //     $oldDomain = Configuration::read()['domain'], $domain = trim($domain, '.')
+        // );
 
         Configuration::updateKey('domain', $domain);
         Site::resecureForNewDomain($oldDomain, $domain);
@@ -92,7 +92,7 @@ if (is_dir(VALET_HOME_PATH)) {
 
         if ($https) {
             Configuration::updateKey('https_port', $port);
-        }else{
+        } else {
             Nginx::updatePort($port);
             Configuration::updateKey('port', $port);
         }
@@ -230,11 +230,11 @@ if (is_dir(VALET_HOME_PATH)) {
     /**
      * Open the current directory in the browser.
      */
-     $app->command('open [domain]', function ($domain = null) {
+    $app->command('open [domain]', function ($domain = null) {
         $url = 'http://'.($domain ?: Site::host(getcwd())).'.'.Configuration::read()['domain'].'/';
 
         passthru('xdg-open '.escapeshellarg($url));
-     })->descriptions('Open the site for the current (or specified) directory in your browser');
+    })->descriptions('Open the site for the current (or specified) directory in your browser');
 
     /**
      * Generate a publicly accessible URL for your project.
@@ -286,9 +286,10 @@ if (is_dir(VALET_HOME_PATH)) {
     $app->command('uninstall', function () {
         Nginx::uninstall();
         PhpFpm::uninstall();
-        DnsMasq::uninstall();
+        // DnsMasq::uninstall();
         Configuration::uninstall();
         Valet::uninstall();
+        WSL::cleanCerts();
 
         info('Valet has been uninstalled.');
     })->descriptions('Uninstall the Valet services');
