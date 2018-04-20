@@ -65,6 +65,9 @@ if (is_dir(VALET_HOME_PATH)) {
             return info(Configuration::read()['domain']);
         }
 
+        $oldDomain = Configuration::read()['domain'];
+        $domain = trim($domain, '.');
+
         // DnsMasq::updateDomain(
         //     $oldDomain = Configuration::read()['domain'], $domain = trim($domain, '.')
         // );
