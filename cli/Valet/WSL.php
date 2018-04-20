@@ -59,13 +59,12 @@ class WSL
             $contents
         );
     }
-
     /**
-     * remove old certs from win host and get publish new certs
+     * remove any certs in win cert store
      *
      * @return void
      */
-    public function cleanAndRepublish()
+    public function cleanCerts()
     {
         $this->files->ensureDirExists($this->wsl_cert_store);
 
@@ -76,6 +75,17 @@ class WSL
         $win_certs->each(function ($cert) {
             $this->files->unlink($this->wsl_cert_store . $cert);
         });
+    }
+    /**
+     * remove old certs from win host and get publish new certs
+     *
+     * @return void
+     */
+    public function cleanAndRepublish()
+    {
+        $this->files->ensureDirExists($this->wsl_cert_store);
+
+        $this->cleanCerts();
 
         $new_certs = collect($this->files->scanDir($this->sites->certificatesPath()))->filter(function ($value, $key) {
             return ends_with($value, '.crt');
