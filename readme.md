@@ -16,6 +16,10 @@ My current goal is to come as close to creating the valet experiance as possible
 
 Documentation for Valet can be found on the [Valet Linux website](https://cpriego.github.io/valet-linux/).
 
+## Setup Procedures
+
+Documentation for how I setup and use this version of valet on my own system: [WSL Setup Gist](https://gist.github.com/valeryan/d071dad5a32ccf94d07e685a2bdd2818).
+
 ## License
 
 Laravel Valet is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
