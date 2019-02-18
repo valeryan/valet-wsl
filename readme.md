@@ -1,6 +1,8 @@
 # Valet *WSL*
 
-This is a fork of valeryan/valet-wsl which implements root CA creation and signing as per upstream laravel/valet project.
+This is a fork of valeryan/valet-wsl to implement root CA creation and signing as per the upstream laravel/valet project.
+
+Simply install the `~/.valet/CA/LaravelValetCASelfSigned.pem` root certificate on your devices and all Valet secured sites will be trusted.
 
 ## Introduction
 
