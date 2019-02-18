@@ -40,7 +40,6 @@ $app->command('install [--ignore-selinux]', function ($ignoreSELinux) {
     // DnsMasq::install(Configuration::read()['domain']);
     Nginx::restart();
     Valet::symlinkToUsersBin();
-    WSL::copyScripts();
 
     output(PHP_EOL.'<info>Valet installed successfully!</info>');
 })->descriptions('Install the Valet services', [
@@ -74,7 +73,6 @@ if (is_dir(VALET_HOME_PATH)) {
 
         Configuration::updateKey('domain', $domain);
         Site::resecureForNewDomain($oldDomain, $domain);
-        WSL::cleanAndRepublish();
         PhpFpm::restart();
         Nginx::restart();
 
@@ -182,7 +180,6 @@ if (is_dir(VALET_HOME_PATH)) {
         $url = ($domain ?: Site::host(getcwd())).'.'.Configuration::read()['domain'];
 
         Site::secure($url);
-        WSL::publish($url);
         PhpFpm::restart();
         Nginx::restart();
 
@@ -292,7 +289,6 @@ if (is_dir(VALET_HOME_PATH)) {
         // DnsMasq::uninstall();
         Configuration::uninstall();
         Valet::uninstall();
-        WSL::cleanCerts();
 
         info('Valet has been uninstalled.');
     })->descriptions('Uninstall the Valet services');
