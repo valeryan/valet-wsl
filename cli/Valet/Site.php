@@ -282,8 +282,6 @@ class Site
             'openssl x509 -req -sha256 -days 730 -CA "%s" -CAkey "%s"%s -in "%s" -out "%s" -extensions v3_req -extfile "%s"',
             $caPemPath, $caKeyPath, $caSrlParam, $csrPath, $crtPath, $confPath
         ));
-
-        $this->trustCertificate($crtPath, $url);
     }
 
     /**
@@ -321,23 +319,6 @@ class Site
     {
         $config = str_replace('VALET_DOMAIN', $url, $this->files->get(__DIR__ . '/../stubs/openssl.conf'));
         $this->files->putAsUser($path, $config);
-    }
-
-    /**
-     * Trust the given certificate file in the Mac Keychain.
-     *
-     * @param  string $crtPath
-     * @return void
-     */
-    public function trustCertificate($crtPath, $url)
-    {
-        $this->cli->run(sprintf(
-            'certutil -d sql:$HOME/.pki/nssdb -A -t TC -n "%s" -i "%s"', $url, $crtPath
-        ));
-
-        $this->cli->run(sprintf(
-            'certutil -d $HOME/.mozilla/firefox/*.default -A -t TC -n "%s" -i "%s"', $url, $crtPath
-        ));
     }
 
     /**
