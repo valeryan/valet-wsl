@@ -40,17 +40,16 @@ class WSL
     }
 
     /**
-     * Publish the .crt file to the windows host
+     * Publish the LaravelValetCASelfSigned.crt file to the windows host
      *
-     * @param string $url
      * @return void
      */
-    public function publish($url)
+    public function publish()
     {
         $this->files->ensureDirExists($this->wsl_cert_store);
 
-        $cert =  $url . '.crt';
-        $crtPath = $this->sites->certificatesPath() . '/' . $cert;
+        $cert =  'LaravelValetCASelfSigned.crt';
+        $crtPath = $this->sites->caPath() . '/' . $cert;
 
         $contents = $this->files->get($crtPath);
 

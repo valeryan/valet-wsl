@@ -182,7 +182,7 @@ if (is_dir(VALET_HOME_PATH)) {
         $url = ($domain ?: Site::host(getcwd())).'.'.Configuration::read()['domain'];
 
         Site::secure($url);
-        WSL::publish($url);
+        WSL::publish();
         PhpFpm::restart();
         Nginx::restart();
 
