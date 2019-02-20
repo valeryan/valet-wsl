@@ -230,7 +230,7 @@ class Site
      */
     public function createCa()
     {
-        $caPemPath = $this->caPath() . '/LaravelValetCASelfSigned.pem';
+        $caPemPath = $this->caPath() . '/LaravelValetCASelfSigned.crt';
         $caKeyPath = $this->caPath() . '/LaravelValetCASelfSigned.key';
 
         if ($this->files->exists($caKeyPath) && $this->files->exists($caPemPath)) {
@@ -247,16 +247,10 @@ class Site
             $this->files->unlink($caPemPath);
         }
 
-   //     $this->cli->run(sprintf(
-   //         'sudo security delete-certificate -c "%s" /Library/Keychains/System.keychain',
-   //         $cName
-   //     ));
-
         $this->cli->runAsUser(sprintf(
             'openssl req -new -newkey rsa:2048 -days 730 -nodes -x509 -subj "/O=%s/commonName=%s/organizationalUnitName=Developers/emailAddress=%s/" -keyout "%s" -out "%s"',
             $oName, $cName, 'rootcertificate@laravel.valet', $caKeyPath, $caPemPath
         ));
-        $this->trustCa($caPemPath);
     }
 
     /**
@@ -267,7 +261,7 @@ class Site
      */
     public function createCertificate($url)
     {
-        $caPemPath = $this->caPath() . '/LaravelValetCASelfSigned.pem';
+        $caPemPath = $this->caPath() . '/LaravelValetCASelfSigned.crt';
         $caKeyPath = $this->caPath() . '/LaravelValetCASelfSigned.key';
         $caSrlPath = $this->caPath() . '/LaravelValetCASelfSigned.srl';
         $keyPath = $this->certificatesPath() . '/' . $url . '.key';
@@ -327,17 +321,6 @@ class Site
     {
         $config = str_replace('VALET_DOMAIN', $url, $this->files->get(__DIR__ . '/../stubs/openssl.conf'));
         $this->files->putAsUser($path, $config);
-    }
-
-    /**
-     * Trust the given root certificate file in the Mac Keychain.
-     *
-     * @param  string  $pemPath
-     * @return void
-     */
-    public function trustCa($caPemPath)
-    {
-        // not implemented
     }
 
     /**
