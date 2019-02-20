@@ -8,3 +8,4 @@ psysh
 Gemfile
 Gemfile.lock
 _site/
+.phpunit.result.cache
