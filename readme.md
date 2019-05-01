@@ -18,7 +18,7 @@ Documentation for Valet can be found on the [Valet Linux website](https://cprieg
 
 ## Setup Procedures
 
-Documentation for how I setup and use this version of valet on my own system: [WSL Setup Gist](https://gist.github.com/valeryan/d071dad5a32ccf94d07e685a2bdd2818).
+Documentation for how I setup and use this version of valet on my own system: [Valet WSL Wiki](https://github.com/valeryan/valet-wsl/wiki/Installation-Guide).
 
 ## License
 
