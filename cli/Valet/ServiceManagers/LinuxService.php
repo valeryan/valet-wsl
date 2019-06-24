@@ -97,7 +97,7 @@ class LinuxService implements ServiceManager
                 }
             }
 
-            return info($this->cli->run('service '.$this->getRealService($service)));
+            return info(trim($this->status($this->getRealService($service))));
         }
     }
 
@@ -147,7 +147,7 @@ class LinuxService implements ServiceManager
                         $this->cli->quietly('sudo systemctl disable ' . $service);
                         info(ucfirst($service).' has been disabled');
                     }
-                    
+
                     info(ucfirst($service).' was already disabled');
                 } catch (DomainException $e) {
                     warning(ucfirst($service).' not available.');
@@ -155,7 +155,7 @@ class LinuxService implements ServiceManager
             }
         } else {
             $services = is_array($services) ? $services : func_get_args();
-            
+
             foreach ($services as $service) {
                 try {
                     $service = $this->getRealService($service);
@@ -206,11 +206,11 @@ class LinuxService implements ServiceManager
                     $service = $this->getRealService($service);
                     $this->cli->quietly("sudo update-rc.d $service defaults");
                     info(ucfirst($service).' has been enabled');
-                    
+
                     return true;
                 } catch (DomainException $e) {
                     warning(ucfirst($service).' not available.');
-                    
+
                     return false;
                 }
             }
@@ -253,7 +253,7 @@ class LinuxService implements ServiceManager
                     $this->cli->run('service '.$service.' status'),
                     'not-found'
                 );
-            }, 
+            },
             function () {
                 throw new DomainException("Unable to determine service name.");
             }
@@ -268,8 +268,16 @@ class LinuxService implements ServiceManager
     private function _hasSystemd()
     {
         try {
-            $this->cli->run(
+            $result = $this->cli->run(
                 'which systemctl',
+                function ($exitCode, $output) {
+                    throw new DomainException('Systemd not available');
+                }
+            );
+
+            // check that systemctl can run
+            $this->cli->run(
+                trim($result),
                 function ($exitCode, $output) {
                     throw new DomainException('Systemd not available');
                 }
@@ -302,7 +310,7 @@ class LinuxService implements ServiceManager
         }
 
         $files->put(
-            $servicePath, 
+            $servicePath,
             $files->get($serviceFile)
         );
 
