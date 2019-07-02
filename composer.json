@@ -59,6 +59,10 @@
         "post-update-cmd": [
         ]
     },
+    "config": {
+		"optimize-autoloader": true,
+		"bin-compat": "full"
+	},
     "bin": [
         "valet"
     ]
