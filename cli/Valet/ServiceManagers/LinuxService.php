@@ -97,7 +97,7 @@ class LinuxService implements ServiceManager
                 }
             }
 
-            return info($this->cli->run('service ' . $this->getRealService($service)));
+            return info(trim($this->status($service)));
         }
     }
 
@@ -207,7 +207,7 @@ class LinuxService implements ServiceManager
                 try {
                     $service = $this->getRealService($service);
                     $this->cli->quietly("sudo update-rc.d $service defaults");
-                    
+
                     info(ucfirst($service) . ' has been enabled');
 
                     return true;
