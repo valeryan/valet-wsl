@@ -1,6 +1,6 @@
 {
-    "name": "cpriego/valet-linux",
-    "description": "A more enjoyable local development experience for Linux.",
+    "name": "valeryan/valet-wsl",
+    "description": "A more enjoyable local development experience for Windows Subsystem for Linux.",
     "keywords": ["laravel", "zonda", "wwdhhd", "ubuntu", "fedora", "arch", "linux", "valet"],
     "license": "MIT",
     "authors": [
@@ -23,6 +23,10 @@
         {
             "name": "Joaquín Marcher",
             "email": "joaquin@marcher.com.uy"
+        },
+        {
+            "name": "Samuel Hilson",
+            "email": "samrhilson@gmail.com"
         }
     ],
     "autoload": {
@@ -41,7 +45,7 @@
         }
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.2",
         "illuminate/container": "~5.3|^6.0",
         "mnapoli/silly": "~1.1",
         "symfony/process": "~2.7|~3.0|~4.0|~5.0",
@@ -51,8 +55,9 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
         "mockery/mockery": "~0.9.4",
-        "phpunit/phpunit": "~5.5"
+        "phpunit/phpunit": "~8.0"
     },
     "scripts": {
         "post-install-cmd": [
@@ -60,6 +65,10 @@
         "post-update-cmd": [
         ]
     },
+    "config": {
+		"optimize-autoloader": true,
+		"bin-compat": "full"
+	},
     "bin": [
         "valet"
     ]

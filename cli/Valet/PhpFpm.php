@@ -158,7 +158,15 @@ class PhpFpm
      */
     public function restart()
     {
-        $this->sm->restart($this->fpmServiceName());
+        $service = $this->fpmServiceName();
+        // WSL has a hard time restarting php if it has not been started first. We will determine
+        // if php is not running and call start service if it is not.
+        if (strpos($this->cli->run('service ' . $service . ' status'), 'not running')) {
+            $this->sm->start($service);
+            return;
+        }
+        // do the normal restart call
+        $this->sm->restart($service);
     }
 
     /**

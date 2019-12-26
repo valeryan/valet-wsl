@@ -7,7 +7,7 @@ use Valet\PackageManagers\PackageKit;
 
 class PackageKitTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $_SERVER['SUDO_USER'] = user();
 
@@ -15,7 +15,7 @@ class PackageKitTest extends TestCase
     }
 
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
     }
@@ -64,12 +64,9 @@ class PackageKitTest extends TestCase
         resolve(PackageKit::class)->installOrFail('dnsmasq');
     }
 
-
-    /**
-     * @expectedException DomainException
-     */
     public function test_install_or_fail_throws_exception_on_failure()
     {
+        $this->expectException(DomainException::class);
         $cli = Mockery::mock(CommandLine::class);
         $cli->shouldReceive('run')->andReturnUsing(function ($command, $onError) {
             $onError(1, 'test error ouput');

@@ -197,7 +197,7 @@ class Nginx
     }
 
     /**
-     * Prepare Nginx for uninstallation.
+     * Prepare Nginx to be uninstalled.
      *
      * @return void
      */

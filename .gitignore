@@ -7,3 +7,5 @@ psysh
 Gemfile
 Gemfile.lock
 _site/
+.vscode
+.phpunit.result.cache

@@ -12,7 +12,7 @@ use Valet\Site;
 
 class NginxTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $_SERVER['SUDO_USER'] = user();
 
@@ -20,7 +20,7 @@ class NginxTest extends TestCase
     }
 
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
     }
@@ -87,7 +87,7 @@ class NginxTest extends TestCase
             $this->assertTrue(strpos($contents, 'fastcgi_index ' . VALET_SERVER_PATH) !== false);
             $this->assertTrue(strpos($contents, 'fastcgi_param SCRIPT_FILENAME ' . VALET_SERVER_PATH) !== false);
             $this->assertTrue(strpos($contents, 'error_log ' . VALET_HOME_PATH . '/Log/nginx-error.log') !== false);
-            $this->assertTrue(strpos($contents, 'fastcgi_pass unix:' . VALET_HOME_PATH . '/valet.sock') !== false);
+            $this->assertTrue(strpos($contents, 'fastcgi_pass 127.0.0.1:9000') !== false);
         })->once();
 
         $files->shouldReceive('exists')->with('/etc/nginx/sites-enabled/default')->andReturn(true)->once();

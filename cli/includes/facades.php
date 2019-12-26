@@ -96,3 +96,7 @@ class Valet extends Facade
 class Requirements extends Facade
 {
 }
+
+class WSL extends Facade
+{
+}

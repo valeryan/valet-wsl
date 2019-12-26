@@ -18,7 +18,7 @@ use Silly\Application;
  */
 Container::setInstance(new Container);
 
-$version = 'v2.2.9';
+$version = 'v1.0.4';
 
 $app = new Application('Valet', $version);
 
@@ -37,9 +37,10 @@ $app->command('install [--ignore-selinux]', function ($ignoreSELinux) {
     Configuration::install();
     Nginx::install();
     PhpFpm::install();
-    DnsMasq::install(Configuration::read()['domain']);
+    // DnsMasq::install(Configuration::read()['domain']);
     Nginx::restart();
     Valet::symlinkToUsersBin();
+    WSL::copyScripts();
 
     output(PHP_EOL . '<info>Valet installed successfully!</info>');
 })->descriptions('Install the Valet services', [
@@ -64,12 +65,16 @@ if (is_dir(VALET_HOME_PATH)) {
             return info(Configuration::read()['domain']);
         }
 
-        DnsMasq::updateDomain(
-            $oldDomain = Configuration::read()['domain'], $domain = trim($domain, '.')
-        );
+        $oldDomain = Configuration::read()['domain'];
+        $domain = trim($domain, '.');
+
+        // DnsMasq::updateDomain(
+        //     $oldDomain = Configuration::read()['domain'], $domain = trim($domain, '.')
+        // );
 
         Configuration::updateKey('domain', $domain);
         Site::resecureForNewDomain($oldDomain, $domain);
+        WSL::cleanAndRepublish();
         PhpFpm::restart();
         Nginx::restart();
 
@@ -180,6 +185,7 @@ if (is_dir(VALET_HOME_PATH)) {
         $url = rtrim(($domain ?: Site::host(getcwd())), '/') . '.' . Configuration::read()['domain'];
 
         Site::secure($url);
+        WSL::publish();
         PhpFpm::restart();
         Nginx::restart();
 
@@ -286,9 +292,10 @@ if (is_dir(VALET_HOME_PATH)) {
     $app->command('uninstall', function () {
         Nginx::uninstall();
         PhpFpm::uninstall();
-        DnsMasq::uninstall();
+        // DnsMasq::uninstall();
         Configuration::uninstall();
         Valet::uninstall();
+        WSL::cleanCerts();
 
         info('Valet has been uninstalled.');
     })->descriptions('Uninstall the Valet services');

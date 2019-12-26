@@ -270,13 +270,20 @@ class LinuxService implements ServiceManager
     private function _hasSystemd()
     {
         try {
-            $this->cli->run(
+            $output = $this->cli->run(
                 'which systemctl',
                 function ($exitCode, $output) {
                     throw new DomainException('Systemd not available');
                 }
             );
 
+            // check that systemctl can run
+            $this->cli->run(
+                trim($output),
+                function ($exitCode, $output) {
+                    throw new DomainException('Systemd not available');
+                }
+            );
             return true;
         } catch (DomainException $e) {
             return false;

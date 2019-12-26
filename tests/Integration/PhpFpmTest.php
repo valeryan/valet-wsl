@@ -8,7 +8,7 @@ use Valet\PhpFpm;
 
 class PhpFpmTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $_SERVER['SUDO_USER'] = user();
 
@@ -16,7 +16,7 @@ class PhpFpmTest extends TestCase
     }
 
 
-    public function tearDown()
+    public function tearDown(): void
     {
         exec('rm -rf ' . __DIR__ . '/output');
         mkdir(__DIR__ . '/output');
@@ -35,11 +35,11 @@ class PhpFpmTest extends TestCase
 
         resolve(StubForUpdatingFpmConfigFiles::class)->installConfiguration();
         $contents = file_get_contents(__DIR__ . '/output/valet.conf');
-        $this->assertContains(sprintf("\nuser = %s", user()), $contents);
-        $this->assertContains(sprintf("\ngroup = %s", group()), $contents);
-        $this->assertContains(sprintf("\nlisten.owner = %s", user()), $contents);
-        $this->assertContains(sprintf("\nlisten.group = %s", group()), $contents);
-        $this->assertContains("\nlisten = " . VALET_HOME_PATH . "/valet.sock", $contents);
+        $this->assertStringContainsString(sprintf("\nuser = %s", user()), $contents);
+        $this->assertStringContainsString(sprintf("\ngroup = %s", group()), $contents);
+        $this->assertStringContainsString(sprintf("\nlisten.owner = %s", user()), $contents);
+        $this->assertStringContainsString(sprintf("\nlisten.group = %s", group()), $contents);
+        $this->assertStringContainsString("\nlisten = 127.0.0.1:9000", $contents);
     }
 }
 
@@ -51,7 +51,7 @@ class StubForUpdatingFpmConfigFiles extends PhpFpm
         return __DIR__ . '/output';
     }
 
-    public function getVersion()
+    public function getVersion($real = false)
     {
         return '7.1';
     }

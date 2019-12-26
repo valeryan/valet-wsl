@@ -5,7 +5,7 @@ use Valet\Filesystem;
 
 class FilesystemTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         exec('rm -rf ' . __DIR__ . '/output');
         mkdir(__DIR__ . '/output');
