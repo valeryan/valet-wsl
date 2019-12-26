@@ -1,5 +1,4 @@
 <?php
-
 namespace Valet;
 
 class WSL
@@ -30,9 +29,7 @@ class WSL
     public function copyScripts()
     {
         $this->files->ensureDirExists($this->wsl_cert_store);
-
         $contents = $this->files->get(__DIR__.'/../stubs/install_certs.cmd');
-
         $this->files->put(
             $this->wsl_cert_store . 'install_certs.cmd',
             $contents
@@ -47,12 +44,9 @@ class WSL
     public function publish()
     {
         $this->files->ensureDirExists($this->wsl_cert_store);
-
         $cert =  'LaravelValetCASelfSigned.crt';
         $crtPath = $this->sites->caPath() . '/' . $cert;
-
         $contents = $this->files->get($crtPath);
-
         $this->files->put(
             $this->wsl_cert_store . $cert,
             $contents
@@ -66,15 +60,14 @@ class WSL
     public function cleanCerts()
     {
         $this->files->ensureDirExists($this->wsl_cert_store);
-
         $win_certs = collect($this->files->scanDir($this->wsl_cert_store))->filter(function ($value, $key) {
             return ends_with($value, '.crt');
         });
-
         $win_certs->each(function ($cert) {
             $this->files->unlink($this->wsl_cert_store . $cert);
         });
     }
+  
     /**
      * remove old certs from win host and get publish new certs
      *
@@ -83,16 +76,12 @@ class WSL
     public function cleanAndRepublish()
     {
         $this->files->ensureDirExists($this->wsl_cert_store);
-
         $this->cleanCerts();
-
         $new_certs = collect($this->files->scanDir($this->sites->certificatesPath()))->filter(function ($value, $key) {
             return ends_with($value, '.crt');
         });
-
         $new_certs->each(function ($cert) {
             $contents = $this->files->get($this->sites->certificatesPath() . '/' . $cert);
-
             $this->files->put(
                 $this->wsl_cert_store . $cert,
                 $contents

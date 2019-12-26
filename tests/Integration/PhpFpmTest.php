@@ -1,10 +1,10 @@
 <?php
 
-use Valet\PhpFpm;
-use Valet\Contracts\PackageManager;
-use Valet\Contracts\ServiceManager;
 use Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
+use Valet\Contracts\PackageManager;
+use Valet\Contracts\ServiceManager;
+use Valet\PhpFpm;
 
 class PhpFpmTest extends TestCase
 {
@@ -18,7 +18,7 @@ class PhpFpmTest extends TestCase
 
     public function tearDown(): void
     {
-        exec('rm -rf '.__DIR__.'/output');
+        exec('rm -rf ' . __DIR__ . '/output');
         mkdir(__DIR__ . '/output');
         touch(__DIR__ . '/output/.gitkeep');
 
@@ -51,8 +51,13 @@ class StubForUpdatingFpmConfigFiles extends PhpFpm
         return __DIR__ . '/output';
     }
 
-    public function getVersion()
+    public function getVersion($real = false)
     {
         return '7.1';
+    }
+
+    public function systemdDropInOverride()
+    {
+        return;
     }
 }

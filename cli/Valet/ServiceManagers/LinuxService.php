@@ -85,19 +85,19 @@ class LinuxService implements ServiceManager
         foreach ($services as $service) {
             if ($this->_hasSystemd()) {
                 $status = $this->cli->run(
-                    'systemctl status '.$this->getRealService($service).' | grep "Active:"'
+                    'systemctl status ' . $this->getRealService($service) . ' | grep "Active:"'
                 );
 
                 $running = strpos(trim($status), 'running');
 
                 if ($running) {
-                    return info(ucfirst($service).' is running...');
+                    return info(ucfirst($service) . ' is running...');
                 } else {
-                    return warning(ucfirst($service).' is stopped...');
+                    return warning(ucfirst($service) . ' is stopped...');
                 }
             }
 
-            return info(trim($this->status($this->getRealService($service))));
+            return info(trim($this->status($service)));
         }
     }
 
@@ -110,7 +110,7 @@ class LinuxService implements ServiceManager
      */
     public function status($service)
     {
-        return $this->cli->run('service '.$this->getRealService($service).' status');
+        return $this->cli->run('service ' . $this->getRealService($service) . ' status');
     }
 
     /**
@@ -143,14 +143,14 @@ class LinuxService implements ServiceManager
                 try {
                     $service = $this->getRealService($service);
 
-                    if (! $this->disabled($service)) {
+                    if (!$this->disabled($service)) {
                         $this->cli->quietly('sudo systemctl disable ' . $service);
-                        info(ucfirst($service).' has been disabled');
+                        info(ucfirst($service) . ' has been disabled');
                     }
 
-                    info(ucfirst($service).' was already disabled');
+                    info(ucfirst($service) . ' was already disabled');
                 } catch (DomainException $e) {
-                    warning(ucfirst($service).' not available.');
+                    warning(ucfirst($service) . ' not available.');
                 }
             }
         } else {
@@ -162,7 +162,7 @@ class LinuxService implements ServiceManager
                     $this->cli->quietly("sudo chmod -x /etc/init.d/{$service}");
                     $this->cli->quietly("sudo update-rc.d $service defaults");
                 } catch (DomainException $e) {
-                    warning(ucfirst($service).' not available.');
+                    warning(ucfirst($service) . ' not available.');
                 }
             }
         }
@@ -186,15 +186,17 @@ class LinuxService implements ServiceManager
 
                     if ($this->disabled($service)) {
                         $this->cli->quietly('sudo systemctl enable ' . $service);
-                        info(ucfirst($service).' has been enabled');
+                        info(ucfirst($service) . ' has been enabled');
+
                         return true;
                     }
 
-                    info(ucfirst($service).' was already enabled');
+                    info(ucfirst($service) . ' was already enabled');
 
                     return true;
                 } catch (DomainException $e) {
-                    warning(ucfirst($service).' not available.');
+                    warning(ucfirst($service) . ' not available.');
+
                     return false;
                 }
             }
@@ -205,11 +207,12 @@ class LinuxService implements ServiceManager
                 try {
                     $service = $this->getRealService($service);
                     $this->cli->quietly("sudo update-rc.d $service defaults");
-                    info(ucfirst($service).' has been enabled');
+
+                    info(ucfirst($service) . ' has been enabled');
 
                     return true;
                 } catch (DomainException $e) {
-                    warning(ucfirst($service).' not available.');
+                    warning(ucfirst($service) . ' not available.');
 
                     return false;
                 }
@@ -249,8 +252,8 @@ class LinuxService implements ServiceManager
     {
         return collect($service)->first(
             function ($service) {
-                return ! strpos(
-                    $this->cli->run('service '.$service.' status'),
+                return !strpos(
+                    $this->cli->run('service ' . $service . ' status'),
                     'not-found'
                 );
             },
@@ -268,7 +271,7 @@ class LinuxService implements ServiceManager
     private function _hasSystemd()
     {
         try {
-            $result = $this->cli->run(
+            $output = $this->cli->run(
                 'which systemctl',
                 function ($exitCode, $output) {
                     throw new DomainException('Systemd not available');
@@ -277,12 +280,11 @@ class LinuxService implements ServiceManager
 
             // check that systemctl can run
             $this->cli->run(
-                trim($result),
+                trim($output),
                 function ($exitCode, $output) {
                     throw new DomainException('Systemd not available');
                 }
             );
-
             return true;
         } catch (DomainException $e) {
             return false;
@@ -301,12 +303,12 @@ class LinuxService implements ServiceManager
         info("Installing Valet DNS service...");
 
         $servicePath = '/etc/init.d/valet-dns';
-        $serviceFile = __DIR__.'/../../stubs/init/sysvinit';
-        $hasSystemd  = $this->_hasSystemd();
+        $serviceFile = __DIR__ . '/../../stubs/init/sysvinit';
+        $hasSystemd = $this->_hasSystemd();
 
         if ($hasSystemd) {
             $servicePath = '/etc/systemd/system/valet-dns.service';
-            $serviceFile = __DIR__.'/../../stubs/init/systemd';
+            $serviceFile = __DIR__ . '/../../stubs/init/systemd';
         }
 
         $files->put(
@@ -314,7 +316,7 @@ class LinuxService implements ServiceManager
             $files->get($serviceFile)
         );
 
-        if (! $hasSystemd) {
+        if (!$hasSystemd) {
             $this->cli->run("chmod +x $servicePath");
         }
 

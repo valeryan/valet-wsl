@@ -9,30 +9,30 @@ class CommandLine
     /**
      * Simple global function to run commands.
      *
-     * @param  string  $command
+     * @param string $command
      * @return void
      */
     public function quietly($command)
     {
-        $this->runCommand($command.' > /dev/null 2>&1');
+        $this->runCommand($command . ' > /dev/null 2>&1');
     }
 
     /**
      * Simple global function to run commands.
      *
-     * @param  string  $command
+     * @param string $command
      * @return void
-     * @todo  currently WSL has a bug with changing users the work around is to add and extra sudo. When this is fixed remove extra sudo
+     * @todo  Remove double sudo fix for WSL bug when fix is verified. https://github.com/Microsoft/WSL/issues/962
      */
     public function quietlyAsUser($command)
     {
-        $this->quietly('sudo sudo -u '.user().' '.$command.' > /dev/null 2>&1');
+        $this->quietly('sudo sudo -u ' . user() . ' ' . $command . ' > /dev/null 2>&1');
     }
 
     /**
      * Pass the command to the command line and display the output.
      *
-     * @param  string  $command
+     * @param string $command
      * @return void
      */
     public function passthru($command)
@@ -43,8 +43,8 @@ class CommandLine
     /**
      * Run the given command as the non-root user.
      *
-     * @param  string  $command
-     * @param  callable $onError
+     * @param string   $command
+     * @param callable $onError
      * @return string
      */
     public function run($command, callable $onError = null)
@@ -55,28 +55,37 @@ class CommandLine
     /**
      * Run the given command.
      *
-     * @param  string  $command
-     * @param  callable $onError
+     * @param string   $command
+     * @param callable $onError
      * @return string
-     * @todo  currently WSL has a bug with changing users the work around is to add and extra sudo. When this is fixed remove extra sudo
+     * @todo  Remove double sudo fix for WSL bug when fix is verified. https://github.com/Microsoft/WSL/issues/962
      */
     public function runAsUser($command, callable $onError = null)
     {
-        return $this->runCommand('sudo sudo -u '.user().' '.$command, $onError);
+        return $this->runCommand('sudo sudo -u ' . user() . ' ' . $command, $onError);
     }
 
     /**
      * Run the given command.
      *
-     * @param  string  $command
-     * @param  callable $onError
+     * @param string   $command
+     * @param callable $onError
      * @return string
      */
     protected function runCommand($command, callable $onError = null)
     {
-        $onError = $onError ?: function () {};
+        $onError = $onError ?: function () {
+        };
 
-        $process = new Process($command);
+        // Symfony's 4.x Process component has deprecated passing a command string
+        // to the constructor, but older versions (which Valet's Composer
+        // constraints allow) don't have the fromShellCommandLine method.
+        // For more information, see: https://github.com/laravel/valet/pull/761
+        if (method_exists(Process::class, 'fromShellCommandline')) {
+            $process = Process::fromShellCommandline($command);
+        } else {
+            $process = new Process($command);
+        }
 
         $processOutput = '';
         $process->setTimeout(null)->run(function ($type, $line) use (&$processOutput) {

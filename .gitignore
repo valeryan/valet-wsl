@@ -1,4 +1,3 @@
-.vscode/
 vendor/
 composer.lock
 error.log
@@ -8,4 +7,5 @@ psysh
 Gemfile
 Gemfile.lock
 _site/
+.vscode/
 .phpunit.result.cache
