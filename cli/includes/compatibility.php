@@ -9,11 +9,11 @@ $inTestingEnvironment = strpos($_SERVER['SCRIPT_NAME'], 'phpunit') !== false;
 if (PHP_OS != 'Linux' && !$inTestingEnvironment && !$inValidation) {
     echo 'Valet only supports Linux.' . PHP_EOL;
 
-    exit(1);
+    exit(3);
 }
 
 if (version_compare(PHP_VERSION, '7.2', '<')) {
     echo "Valet requires PHP 7.2 or later.";
 
-    exit(1);
+    exit(3);
 }

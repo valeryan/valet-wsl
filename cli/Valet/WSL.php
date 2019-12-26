@@ -52,7 +52,6 @@ class WSL
             $contents
         );
     }
-
     /**
      * remove any certs in win cert store
      *
@@ -68,7 +67,7 @@ class WSL
             $this->files->unlink($this->wsl_cert_store . $cert);
         });
     }
-
+  
     /**
      * remove old certs from win host and get publish new certs
      *
