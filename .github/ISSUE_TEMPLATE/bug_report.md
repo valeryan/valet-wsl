@@ -9,9 +9,9 @@ assignees: ''
 
 **Basic info**
 
-| Distro (Name and version) | WSL Verson  | PHP Version | Valet version |
-| ------------------------- | ----------- | ----------- | --------------|
-| Ex: Windows 10 build #    | 1           | 7.3.1       | 1.0.5         |
+| Windows 10 Build | WSL Distro      | WSL Verson  | PHP Version | Valet version |
+| ---------------- | --------------- | ----------- | ------------| ------------- |
+| Ex: 10240        | Ex: Ubuntu 18.4 | 1           | 7.3.1       | 1.0.5         |
 
 - [ ] I've checked the issue queue and could not find anything similar to my bug.
 - [ ] I'm on the latest version of valet-wsl (`valet --version`): `<Valet-wsl-Version>`
