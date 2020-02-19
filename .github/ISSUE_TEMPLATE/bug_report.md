@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a bug report to improve valet-linux
+about: Create a bug report to improve valet-wsl
 title: 'Bug: <Your-Title>'
 labels: Bug, Needs review
 assignees: ''
@@ -9,12 +9,12 @@ assignees: ''
 
 **Basic info**
 
-| Distro (Name and version) | PHP Version | Valet version |
-| ------------------------- | ----------- | ------------- |
-| Ex: Manjaro 18.3          | 7.3.1       | 2.2.3         |
+| Distro (Name and version) | WSL Verson  | PHP Version | Valet version |
+| ------------------------- | ----------- | ----------- | --------------|
+| Ex: Windows 10 build #    | 1           | 7.3.1       | 1.0.5         |
 
 - [ ] I've checked the issue queue and could not find anything similar to my bug.
-- [ ] I'm on the latest version of valet-linux (`valet --version`): `<Valet-Linux-Version>`
+- [ ] I'm on the latest version of valet-wsl (`valet --version`): `<Valet-wsl-Version>`
 - [ ] I've run `valet fix` and `valet install` after updating and before submitting my issue/feature.
 
 **What is the problem?**
