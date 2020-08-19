@@ -15,7 +15,7 @@ assignees: ''
 
 - [ ] I've checked the issue queue and could not find anything similar to my bug.
 - [ ] I'm on the latest version of valet-wsl (`valet --version`): `<Valet-wsl-Version>`
-- [ ] I've run `valet fix` and `valet install` after updating and before submitting my issue/feature.
+- [ ] I've run `valet install` after updating and before submitting my issue/feature.
 
 **What is the problem?**
 A description of what you think the problem is.
